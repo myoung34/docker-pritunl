@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 [ -d /dev/net ] || mkdir -p /dev/net
@@ -26,5 +26,8 @@ cat << EOF >/etc/pritunl.conf
     "local_address_interface": "auto"
 }
 EOF
+
+# shellcheck disable=SC2015
+[[ -n "$NO_LOG_FILE" ]] && ( sed -i.bak 's/.log_path.*//g' /etc/pritunl.conf; sed -i.bak 's/.journal_path.*//g' /etc/pritunl.conf ) || :
 
 exec /usr/bin/pritunl start -c /etc/pritunl.conf
